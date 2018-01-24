@@ -1,3 +1,5 @@
+import Drawscreen from './my_drawscreen'
+
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 
@@ -9,7 +11,7 @@ const BG_IMG_SRC = 'images/my_bg.png'
  */
 export default class BackGround {
   constructor(ctx) {
-
+    this.drawscreen = new Drawscreen(ctx)
   }
 
   update() {
@@ -24,7 +26,7 @@ export default class BackGround {
    */
   render(ctx) {
     //ctx.drawImage中使用this指向ctx，不是BackGround
-    // var that = this
+    var that = this
     var image = wx.createImage()
 
     image.onload = function () {
@@ -35,6 +37,7 @@ export default class BackGround {
         screenWidth, 
         screenHeight
       )
+      that.drawscreen.render(ctx)
     }
     image.src = 'images/my_bg.png'//img.src相对于项目主目录的据对路径
   }
