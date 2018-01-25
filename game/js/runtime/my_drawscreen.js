@@ -23,6 +23,10 @@ export default class Drawscreen extends Sprite {
   render(ctx){
 
     window.drawscreen = wx.createCanvas()
+    drawscreen._x = this.x
+    drawscreen._y = this.y
+    drawscreen._width = PLAYER_WIDTH
+    drawscreen._height = PLAYER_HEIGHT
     let screenContext = drawscreen.getContext('2d')
     screenContext.fillStyle = "#FF0000";
     screenContext.fillRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
