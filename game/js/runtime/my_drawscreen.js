@@ -20,7 +20,7 @@ export default class Drawscreen extends Sprite {
     this.y = screenHeight * 0.3
   }
 
-  render(ctx){
+  render(ctx){  
 
     window.drawscreen = wx.createCanvas()
     drawscreen._x = this.x
@@ -36,6 +36,22 @@ export default class Drawscreen extends Sprite {
        this.x,
        this.y
     )
+
+    // 文字
+    let textscreen = wx.createCanvas()
+    let textContext = textscreen.getContext('2d')
+    textContext.font = "20px Arial";
+    textContext.fillStyle = '#ff0000'
+    textContext.fillText('hello, world', 20, 20)
+
+    ctx.drawImage(
+      textscreen,
+      0,
+      0
+    )
+
+    
+    
    
   }
   

@@ -18,6 +18,7 @@ export default class Pen extends Sprite {
   constructor(ctx) {
     super(PLAYER_IMG_SRC, PLAYER_WIDTH, PLAYER_HEIGHT)
 
+    ctx.strokeStyle = "#ffffff"
     // 玩家默认处于屏幕底部居中位置
     this.start_x = 0
     this.start_y = 0
@@ -26,11 +27,44 @@ export default class Pen extends Sprite {
 
     // 用于在手指移动的时候标识手指是否已经在飞机上了
     this.touched = false
+    this.color_selected = false
 
     this.bullets = []
 
     // 初始化事件监听
     this.initEvent(ctx)
+  }
+
+  /**
+   * 当手指触摸屏幕的时候
+   * 判断手指是否在选择颜色按钮上
+   * @param {Number} x: 手指的X轴坐标
+   * @param {Number} y: 手指的Y轴坐标
+   * @return {Boolean}: 用于标识手指是否是在选择颜色按钮上的布尔值
+   */
+  checkIsFingerOnColor(x, y) {
+    const deviation = 5
+
+    window.colors.forEach(function(item, index){
+
+      let colorBtnX = item._x
+      let colorBtnY = item._y
+      let colorBtnWidth = item._width
+      let colorBtnHeight = item._height
+
+      console.log('x: ' + x);
+
+       if(!!(x >= colorBtnX - deviation
+        && y >= colorBtnY - deviation
+        && x <= colorBtnX + colorBtnWidth + deviation
+        && y <= colorBtnY + colorBtnHeight + deviation)){
+         return index
+        }
+
+    })
+
+    return -1
+
   }
 
   /**
@@ -86,6 +120,11 @@ export default class Pen extends Sprite {
         this.start_x = x
         this.start_y = y
         this.setAirPosAcrossFingerPosZ(x, y)
+      }else{
+        console.log('this.checkIsFingerOnColor(x, y): ' + this.checkIsFingerOnColor(x, y))
+        if(this.checkIsFingerOnColor(x, y) != -1){
+          this.color_selected = true
+        }
       }
 
     }).bind(this))
@@ -105,16 +144,28 @@ export default class Pen extends Sprite {
           this.start_x = x
           this.start_y = y
           this.setAirPosAcrossFingerPosZ(x, y)
+        }else{
+          
         }
+      }
+
+      if (this.color_selected && this.checkIsFingerOnColor(x, y) != -1) {
+        this.color_selected = true
+      }else{
+        this.color_selected = false
       }
 
     }).bind(this))
 
     canvas.addEventListener('touchend', ((e) => {
       e.preventDefault()
+      
+      if (this.color_selected){
+        ctx.strokeStyle = window.fillcolors[this.checkIsFingerOnColor(x, y)]
+      }
 
-     
       this.touched = false
+      this.color_selected = false
     }).bind(this))
   }
 
@@ -122,7 +173,7 @@ export default class Pen extends Sprite {
    * 更新画笔
    */
   drawContent(ctx) {
-    
+    console.log('画笔颜色：' + ctx.strokeStyle);
     ctx.moveTo(this.start_x, this.start_y)
     ctx.lineTo(this.x, this.y)
     ctx.stroke()

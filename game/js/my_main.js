@@ -3,6 +3,9 @@ import Pen from './player/my_index'
 
 let ctx = canvas.getContext('2d')
 
+
+
+
 /**
  * 游戏主函数
  */
@@ -18,6 +21,9 @@ export default class Main {
     // 创建背景
     this.bg = new BackGround(ctx)
     this.bg.render(ctx)
+
+    
+
     this.pen = new Pen(ctx)
 
     this.render()
@@ -43,7 +49,6 @@ export default class Main {
      * 每一帧重新绘制所有的需要展示的元素
      */
   render() {
-    console.log('render()')
     let that = this
     
     this.pen.drawContent(ctx)
